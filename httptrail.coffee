@@ -1,9 +1,11 @@
+#!/usr/bin/env coffee
+
 http    = require 'http'
 stream  = require 'stream'
 urllib  = require 'url'
 
 
-class HttpStream extends stream.Transform
+exports.HttpStream = class HttpStream extends stream.Transform
 
   constructor: (options) ->
     super
@@ -30,7 +32,7 @@ class HttpStream extends stream.Transform
     done()
 
 
-proxy = http.createServer (request, response) ->
+exports.proxy = proxy = (port) -> http.createServer (request, response) ->
   log =
     request:  new HttpStream prefix: '> '
     response: new HttpStream prefix: '< '
@@ -40,7 +42,7 @@ proxy = http.createServer (request, response) ->
 
   url = urllib.parse request.url
   proxied = http.request
-    port:    process.env.UPSTREAM_PORT
+    port:    port
     method:  request.method
     path:    url.path
     auth:    url.auth
@@ -53,4 +55,12 @@ proxy = http.createServer (request, response) ->
     upstream.pipe response
     upstream.pipe log.response
 
-proxy.listen process.env.PORT
+
+if require.main == module
+  [upstream, port] = process.argv[2..]
+  if upstream and port
+    process.stderr.write "Proxying port #{port} to upstream server on port #{upstream}\n"
+    proxy(upstream).listen(port)
+  else
+    process.stderr.write "Usage: #{process.argv[1]} <upstream port> <proxy port>\n"
+    process.exit 1
