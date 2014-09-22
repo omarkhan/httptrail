@@ -30,15 +30,14 @@ class HttpStream extends stream.Transform
     done()
 
 
-log =
-  request:  new HttpStream(prefix: '> ')
-  response: new HttpStream(prefix: '< ')
-
-log.request.pipe  process.stdout
-log.response.pipe process.stdout
-
-
 proxy = http.createServer (request, response) ->
+  log =
+    request:  new HttpStream prefix: '> '
+    response: new HttpStream prefix: '< '
+
+  log.request.pipe  process.stdout
+  log.response.pipe process.stdout
+
   url = urllib.parse request.url
   proxied = http.request
     port:    process.env.UPSTREAM_PORT
@@ -47,10 +46,11 @@ proxy = http.createServer (request, response) ->
     auth:    url.auth
     headers: request.headers
   request.pipe proxied
-  request.pipe log.request, end: false
+  request.pipe log.request
+
   proxied.once 'response', (upstream) ->
     response.writeHead upstream.statusCode, upstream.headers
     upstream.pipe response
-    upstream.pipe log.response, end: false
+    upstream.pipe log.response
 
 proxy.listen process.env.PORT
