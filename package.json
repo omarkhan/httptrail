@@ -1,0 +1,17 @@
+{
+  "name": "httptrail",
+  "version": "0.0.1",
+  "description": "Simple http logging proxy for development",
+  "homepage": "https://github.com/omarkhan/httptrail",
+  "main": "httptrail.js",
+  "bin": "httptrail.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/omarkhan/httptrail.git"
+  },
+  "scripts": {
+    "compile": "echo '#!/usr/bin/env node' > httptrail.js && coffee -bcp httptrail.coffee >> httptrail.js && chmod +x httptrail.js"
+  },
+  "author": "Omar Khan <omar@omarkhan.me> (http://omarkhan.me)",
+  "license": "MIT"
+}
