@@ -23,4 +23,4 @@ Examples
 
     httptrail 8000 8001
 
-    httptrail https://github.com/omarkhan 8000
+    httptrail https://github.com/ 8000

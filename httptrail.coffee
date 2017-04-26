@@ -46,6 +46,7 @@ exports.proxy = proxy = (host) ->
     log.request.pipe  process.stdout
     log.response.pipe process.stdout
 
+    request.headers.host = host.hostname
     url = urllib.parse request.url
     proxied = client.request
       hostname: host.hostname
@@ -72,8 +73,8 @@ cleanHost = (host) ->
   {protocol, hostname, port} = urllib.parse host
   protocol ||= 'http:'
   hostname ||= 'localhost'
-  port     ||= 8000
-  return "#{protocol}//#{hostname}:#{port}/"
+  port = if port then ":#{port}" else ''
+  return "#{protocol}//#{hostname}#{port}/"
 
 
 if require.main == module
