@@ -1,6 +1,6 @@
 {
   "name": "httptrail",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Simple http logging proxy for development",
   "homepage": "https://github.com/omarkhan/httptrail",
   "main": "httptrail.js",
