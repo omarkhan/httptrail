@@ -21,7 +21,7 @@ exports.HttpStream = class HttpStream extends stream.Transform
   format: (line) => "#{this.prefix}#{line}\n"
 
   _transform: (chunk, encoding, done) ->
-    this.buffer += chunk.toString(if encoding == 'buffer' then null else encoding)
+    this.buffer += chunk.toString(encoding unless encoding == 'buffer')
     if this.buffer.indexOf('\n') > -1
       [lines..., this.buffer] = this.buffer.split '\n'
       this.push lines.map(this.format).join('')

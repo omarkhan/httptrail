@@ -39,7 +39,7 @@ exports.HttpStream = HttpStream = (function(superClass) {
 
   HttpStream.prototype._transform = function(chunk, encoding, done) {
     var i, lines, ref;
-    this.buffer += chunk.toString(encoding === 'buffer' ? null : encoding);
+    this.buffer += chunk.toString(encoding !== 'buffer' ? encoding : void 0);
     if (this.buffer.indexOf('\n') > -1) {
       ref = this.buffer.split('\n'), lines = 2 <= ref.length ? slice.call(ref, 0, i = ref.length - 1) : (i = 0, []), this.buffer = ref[i++];
       this.push(lines.map(this.format).join(''));
